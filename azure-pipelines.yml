@@ -37,11 +37,11 @@ steps:
   displayName: Run Gulp Tasks'
 
 - script: 'echo "$(Build.definitionName), $(Build.BuildId), $(build.buildnumber)" > buildinfo.txt'
-  displayname: 'Write Build Info'
-  workingdirectory: Tailspin.spacegame.web/wwwroot
+  displayName: 'Write Build Info'
+  workingDirectory: Tailspin.spacegame.web/wwwroot
 
 - task: DotNetCoreCLI@2
-  displayname: 'restore Project Dependencies'
+  displayName: 'restore Project Dependencies'
   inputs:
     command: 'restore'
     projects: '**.*/csproj'
