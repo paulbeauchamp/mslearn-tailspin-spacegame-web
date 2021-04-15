@@ -32,7 +32,7 @@ steps:
   inputs:
     verbose: false
 
-- script: './node_modules/.bin/node-sass $(wwwdootdir) --output $(wwwrootdir)'
+- script: './node_modules/.bin/node-sass $(wwwrootdir) --output $(wwwrootdir)'
   displayName: 'Compile Sass assets'
 
 - task: gulp@1
