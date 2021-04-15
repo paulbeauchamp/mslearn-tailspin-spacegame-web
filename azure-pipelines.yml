@@ -11,8 +11,10 @@ pool:
   demands:
   - npm
 
-#variables:
-#  buildConfiguration: 'Release'
+variables:
+  buildConfiguration: 'Release'
+  wwwrootdir: 'Tailspin.SpaceGame.Web/wwwroot'
+  dotnetSDKVersion: '3.1.300'
 
 #steps:
 #- script: dotnet build --configuration $(buildConfiguration)
@@ -20,17 +22,17 @@ pool:
 
 steps:
 - task: UseDotNet@2
-  displayName: 'Use .NET Core SDK 3.1.300'
+  displayName: 'Use .NET Core SDK $(dotnetSDKVersion)'
   inputs: 
     packageType: sdk
-    version: 3.1.300
+    version: $(dotnetSDKVersion)
 
 - task: Npm@1
   displayName: 'Run npm install'
   inputs:
     verbose: false
 
-- script: './node_modules/.bin/node-sass Tailspin.SpaceGame.Web/wwwroot --output Tailspin.SpaceGame.Web/wwwroot'
+- script: './node_modules/.bin/node-sass $(wwwdootdir) --output $(wwwrootdir)'
   displayName: 'Compile Sass assets'
 
 - task: gulp@1
@@ -38,7 +40,7 @@ steps:
 
 - script: 'echo "$(Build.definitionName), $(Build.BuildId), $(build.buildnumber)" > buildinfo.txt'
   displayName: 'Write Build Info'
-  workingDirectory: Tailspin.SpaceGame.Web/wwwroot
+  workingDirectory: $(wwwrootdir)
 
 - task: DotNetCoreCLI@2
   displayName: 'restore Project Dependencies'
@@ -47,19 +49,19 @@ steps:
     projects: '**/*.csproj'
 
 - task: DotNetCoreCLI@2
-  displayName: 'Build the project - release'
+  displayName: 'Build the project - $(buildconfiguration)'
   inputs:
     command: 'build'
-    arguments: '--no-restore --configuration Release'
+    arguments: '--no-restore --configuration $(buildconfiguration)'
     projects: '**/*.csproj'
 
 - task: DotNetCoreCLI@2
-  displayName: 'Publish the project - Release'
+  displayName: 'Publish the project - $(buildconfiguration)'
   inputs:
     command: 'publish'
     projects: '**/*.csproj'
     publishWebProjects: false
-    arguments: '--no-build --configuration Release --output $(Build.ArtifactStagingDirectory)/Release'
+    arguments: '--no-build --configuration $(buildconfiguration) --output $(Build.ArtifactStagingDirectory)/$(buildconfiguration)'
     zipAfterPublish: true
 
 - task: PublishBuildArtifacts@1
