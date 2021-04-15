@@ -38,7 +38,7 @@ steps:
 
 - script: 'echo "$(Build.definitionName), $(Build.BuildId), $(build.buildnumber)" > buildinfo.txt'
   displayName: 'Write Build Info'
-  workingDirectory: Tailspin.spacegame.web/wwwroot
+  workingDirectory: Tailspin.SpaceGame.Web/wwwroot
 
 - task: DotNetCoreCLI@2
   displayName: 'restore Project Dependencies'
